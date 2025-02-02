@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+    <link rel="icon" href="{% static 'img/icons8-huella-de-gato-16.png'%}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://kit.fontawesome.com/28585b3709.js" crossorigin="anonymous"></script>
+    <title>Boleta</title>
+</head>
+<body>
+
+    <div class="l-col-right ticket-wrap" aria-label="A fake boat ticket demonstrating mixing font weights and widths">
+        <div class="ticket" aria-hidden="true">
+            <div class="ticket__header">
+                <div class="ticket__co">
+                    <h1 class="titulo-nav animate__animated animate__rubberBand">Little Petshop </h1>
+                </div>
+            </div>
+            <div class="ticket__body">
+                
+                <p class="ticket__route">Boleta de compra</p>
+                
+                <p class="ticket__description">Datos de su compra</p>
+                {% for i in productos %}
+                <div class="ticket__timing">  
+                    <p>
+                        <span class="u-upper ticket__small-label">Fecha</span>
+                        <span class="ticket__detail">{{ fecha }}</span>
+                    </p>
+                    <p>
+                        <span class="u-upper ticket__small-label">Codigo Boleta</span>
+                        <span class="ticket__detail">{{ i.id_boleta }}</span>
+                    </p>
+                    <p>
+                        <span class="u-upper ticket__small-label">Codigo Producto</span>
+                        <span class="ticket__detail">{{ i.id_producto }}</span>
+                    </p>
+                    <p>
+                        <span class="u-upper ticket__small-label">Cantidad</span>
+                        <span class="ticket__detail">{{ i.cantidad }}</span>
+                    </p>
+                    <p>
+                        <span class="u-upper ticket__small-label">Subtotal</span>
+                        <span class="ticket__detail">{{ i.subtotal }}</span>
+                    </p>
+                    
+                </div>
+                {% endfor %}
+                <p class="u-upper ticket__admit">Total a pagar: {{total}}</p>
+                <p class="ticket__fine-print">Porfavor guarde esta boleta para una posible devolución</p>
+                <p class="u-upper ticket__admit">¡Gracias por su compra!</p>
+                
+                <img class="ticket__barcode" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/515428/barcode.png"
+                    alt="Fake barcode" />
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
+
+{% endblock %}

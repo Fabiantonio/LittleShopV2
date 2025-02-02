@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="{% static 'img/icons8-huella-de-gato-16.png'%}">
+
+    <script>
+        function eliminarProducto(id){
+            Swal.fire({
+                "title":"¿Estas seguro?",
+                "text":"Esta accion no se puede revertir",
+                "icon":"question",
+                "showCancelButton":true,
+                "cancellButtonText":"Cancelar",
+                "confirmButtonText":"Eliminar",
+                "confirmButtonColor":"red"
+
+            })
+            .then(function(result){
+                if(result.isConfirmed){
+                    window.location.href = "/eliminarProductos/"+id
+                }
+            })
+        }
+    </script>
+
+    <title>Productos</title>
+
+    <div class="container mt-5 pt-4" style="height: auto;">
+        <h1 class="display-4 text-center">Productos</h1>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Categoria</th>
+                    <th>Imagen</th>
+                    <th>Modificar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for i in entity%}
+                <tr style="vertical-align: middle;">
+                    <td>{{ i.idProducto }}</td>
+                    <td>{{ i.nombre }}</td>
+                    <td>{{ i.precio }}</td>
+                    <td>{{ i.stock }}</td>
+                    <td>{{ i.categoria }}</td>
+                    {% if i.imagen %}
+                        <td>
+                            <img src="{{ i.imagen.url }}" width="150px" alt="">
+                        </td>
+                    {% else %}
+                        <td>
+                            <p style="color: red;">Sin imagen :c</p>
+                        </td>
+                    {% endif %}
+                    <td><a href="{% url 'modificarProductos' i.idProducto %}" class="btn btn-primary">Modificar</a></td>
+                    <td><a href="#" onclick="eliminarProducto({{ i.idProducto }})" class="btn btn-danger">Eliminar</a></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <a href="{% url 'crearProductos' %}" class="btn btn-dark mb-3">Crear Producto</a>
+        <a href="{% url 'inicio' %}" class="btn btn-secondary mb-3">Inicio</a>
+        <div>
+            {% include 'paginator.html' %}
+        </div>
+        {% if messages %}
+            {% for i in messages %}
+                <script>
+                    Swal.fire({
+                        "title": "Felicitaciones",
+                        "text": "{{i}}",
+                        "icon": "success" ,
+                        "confirmButtonColor":"green"   
+                    })
+                </script>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+{% endblock %}

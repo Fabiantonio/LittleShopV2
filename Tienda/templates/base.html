@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
+    <link rel="icon" href="{% static 'img/icons8-huella-de-gato-16.png'%}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://kit.fontawesome.com/28585b3709.js" crossorigin="anonymous"></script>
+    <title>Inicio</title>
+</head>
+
+
+
+</html>
+
+
+<body style="background-color: white;">
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+            <div class="container">
+                <a class="titulo-nav navbar-brand" href="{% url 'inicio' %}">
+                    <h3 class="titu animate__animated animate__rubberBand">Little Petshop </h3>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
+                    <ul class="navbar-nav m-auto mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
+                        </li>
+                        <div class="linea"></div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#productos">Productos</a>
+                        </li>
+                        <div class="linea"></div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#footer" tabindex="-1" aria-disabled="true">Nosotros</a>
+                        </li>
+                        <div class="linea"></div>
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'listarProductos' %}" tabindex="-1"
+                                aria-disabled="true">Crud</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#footer" tabindex="-1" aria-disabled="true">Contacto</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    <div id="carrito" class="carrito-img mx-5">
+                        <a type="button" class="fa-solid fa-cart-shopping position-relative">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ cantidad_productos }}
+                            </span>
+                        </a>
+                    </div>
+                    <div>
+                        {% if user.is_authenticated %}
+                        <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <button  type="submit" style="border: none; background: none">
+                                <img src="{% static 'img/icons8-usuario-64.png' %}" width="40" alt="">
+                                Cerrar sesión
+                            </button>
+                        </form>
+
+                        {% else %}
+                        <a href="{% url 'login' %}" id="login">
+                            <img src="{% static 'img/icons8-usuario-64.png' %}" width="40" alt="">
+                            Iniciar sesión
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    {% block content %}
+    <div class="container mt-5">
+
+    </div>
+    {% endblock %}
+
+    <footer id="footer">
+        <div class="container-fluid py-2" style="background-color: white">
+            <div class="row p-5 pb-2">
+                <div class="col-md-6 col-xs-12 col-lg-3">
+                    <h1 class="h3" style="font-family: 'Lobster', cursive; font-size: 35px;">Little PetShop</h1>
+                    <p class="text-secondary"> 2023, Fabián Casas Website</p>
+                </div>
+                <div class="col-md-6 col-xs-12 col-lg-3">
+                    <p class="h5">Contacto</p>
+                    <div class="mb-2">
+                        <p>Celular: +56920327656</p>
+                        <p>Gmail: fa.casas@duocuc.cl</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12 col-lg-3">
+                    <p class="h5">Quienes somos</p>
+                    <p>
+                        Somos un grupo de amigas que iniciamos este negocio para ayudar a una
+                        fundacion de animales sin fines de lucro
+                    </p>
+                </div>
+                <div class="col-md-6 col-xs-12 col-lg-3">
+                    <p class="h5">Redes sociales</p>
+                    <div class="mb-2">
+                        <img src="{% static 'img/icons8-instagram-48.png' %}" alt="">
+                        <a class="text-dark text-decoration-none" target="_blank"
+                            href="https://www.instagram.com/svnsyro">Instagram</a>
+                    </div>
+                    <div class="mb-2">
+                        <img src="{% static 'img/icons8-facebook-48.png' %}" alt="">
+                        <a class="text-dark text-decoration-none" target="_blank"
+                            href="https://www.facebook.com/">Facebook</a>
+                    </div>
+                    <div class="mb-2">
+                        <img src="{% static 'img/icons8-twitter-48.png' %}" alt="">
+                        <a class="text-dark text-decoration-none" target="_blank" href="https://twitter.com/">Twiter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 pt-4">
+                <p class="text-dark text-center">
+                    Copyrigth - Fabian Casas 2023
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="{% static 'js/app.js' %}"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&callback=iniciarMap"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
+        integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
+        async></script>
+</body>
+
+</html>

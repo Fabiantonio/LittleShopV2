@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+  <link rel="icon" href="{% static 'img/icons8-huella-de-gato-16.png'%}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    .foto-perro {
+      transition: 0.5s;
+    }
+
+    .foto-perro:hover {
+      transform: scale(1.1);
+    }
+
+    .conte {
+      overflow: hidden;
+    }
+  </style>
+
+  <title>Video</title>
+  <div class="container mt-5 pt-5">
+    <section class="video">
+      <div class="container d-flex justify-content-center align-items-center">
+        <div class="row">
+          <div class="col-lg-4 mt-4">
+            <h1>Visión</h1>
+            <p>En nuestra fundación de animales, tenemos una visión clara y apasionada: trabajar incansablemente para
+              crear un mundo donde todos los animales sean amados, respetados y protegidos. Nos esforzamos por
+              brindarles un entorno seguro y cariñoso, y promover su bienestar en todas las etapas de sus vidas. 
+              <br>
+              <br>
+              Además,
+              buscamos ser un referente en la defensa y protección de los derechos de los animales, abogando por leyes
+              más estrictas y políticas de bienestar animal a nivel local y nacional. Nuestra visión es inspirar a otros
+              a unirse a nuestra causa y formar una comunidad comprometida con la protección y el cuidado de los
+              animales, promoviendo un cambio positivo y duradero en la sociedad.</p>
+          </div>
+          <div class="conte col-lg-8 p-0 mt-5">
+            <img class="foto-perro img-fluid" src="{% static 'img/perro_gris.jpg' %}" alt="">
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="container pt-5 pb-5">
+        <div class="row pt-5">
+          <div class="conte col-lg-4 p-0">
+            <img class="foto-perro img-fluid" src="{% static 'img/perro-banner.jpg' %}" alt="">
+          </div>
+          <div class="col-lg-8 mt-2">
+            <h1>Misión</h1>
+            <p>En nuestra fundación de animales, tenemos una visión audaz y trascendental: trabajar incansablemente para
+              crear un mundo donde todos los animales sean amados, respetados y protegidos. Nos visualizamos como
+              líderes en la defensa y promoción de los derechos de los animales, a nivel local, nacional e incluso
+              global. Buscamos establecer un cambio profundo en la forma en que los animales son percibidos y tratados
+              en la sociedad, generando conciencia sobre la importancia de su bienestar y abogando por leyes más justas
+              y protectivas.
+              <br>
+              Nos esforzamos por brindar a cada animal un entorno seguro y amoroso, donde se les valore como individuos
+              únicos y se satisfagan todas sus necesidades físicas, emocionales y sociales. Nuestra visión es que cada
+              animal disfrute de una vida plena y enriquecedora, libre de sufrimiento y explotación. Aspiramos a ser un
+              faro de esperanza y una voz poderosa en la lucha contra la crueldad animal, el abandono y la explotación,
+              promoviendo una convivencia armoniosa entre humanos y animales.
+              <br>
+              Deseamos inspirar a otras organizaciones, gobiernos, empresas y a la sociedad en general a unirse a
+              nuestra misión, creando una red global de protección animal y colaboración. Buscamos impulsar cambios
+              significativos en las políticas públicas y en la mentalidad colectiva, fomentando la adopción de prácticas
+              éticas en la relación con los animales y garantizando su consideración como seres sintientes y valiosos.
+              <br>
+              Nuestra visión trasciende las barreras geográficas y culturales, ya que aspiramos a que cada rincón del
+              mundo sea un lugar seguro y compasivo para todos los animales. Imaginamos un futuro donde los animales
+              sean tratados con respeto, donde la crueldad hacia ellos sea erradicada y donde se promueva la
+              coexistencia pacífica y el equilibrio entre todas las especies.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gale mt-4">
+      <div class="container pb-5">
+        <div class="row" data-masonry='{"percentPosition": true }'>
+          <div class="col-lg-4">
+            <h1>Sobre nosotras</h1>
+            Somos un grupo de tres amigas con una pasión compartida por los animales. Nos unimos con el firme propósito
+            de marcar la diferencia en la vida de aquellos seres que no pueden hablar por sí mismos. Cada una de
+            nosotras aporta habilidades y experiencias únicas, lo que nos permite abordar de manera integral los
+            desafíos que enfrentamos en la protección de los animales.
+            <br>
+            Nuestra fundación se basa en valores fundamentales como la compasión, la empatía y el compromiso. Nos
+            esforzamos por establecer relaciones sólidas con la comunidad, colaborando con otras organizaciones,
+            voluntarios y profesionales comprometidos con el bienestar animal.
+          </div>
+          <div class="col-lg-4">
+            <div class="conte mt-3">
+              <img class="foto-perro img-fluid float-start" width="" src="{% static 'img/gato_siames.jpg' %}" alt="">
+            </div>
+            <div class="conte mb-3 mt-4">
+              <img class="foto-perro img-fluid float-start" src="{% static 'img/gato_ojo.jpg' %}" alt="">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="conte">
+              <img class="foto-perro img-fluid float-end" src="{% static 'img/gato_horizontal.jpg' %}" alt="">
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+{% endblock %}

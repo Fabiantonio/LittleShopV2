@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container mt-5 p-5">
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-md-6">
+            <div class="card border-0">
+                <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}">
+            </div>
+        </div>
+        
+        <!-- Detalles del producto -->
+        <div class="col-md-6">
+            <h1>{{ producto.nombre }}</h1>
+            <p class="text-muted">Categoría: {{ producto.categoria.nombreCategoria }}</p>
+            <h2 class="text-primary">${{ producto.precio }}</h2>
+            
+            {% if producto.stock > 0 %}
+            <p class="text-success">Stock disponible: {{ producto.stock }} unidades</p>
+            <a href="{% url 'agregar' producto.idProducto %}" class="btn btn-primary btn-lg">Agregar al carrito</a>
+            {% else %}
+            <p class="text-danger">Producto agotado</p>
+            {% endif %}
+            
+            <!-- Descripción -->
+            <div class="mt-4">
+                <h3>Descripción</h3>
+                <p>{{ producto.descripcion|default:"Sin descripción disponible"|linebreaks }}</p>
+            </div>
+            
+            <!-- Especificaciones -->
+            {% if producto.especificaciones %}
+            <div class="mt-4">
+                <h3>Especificaciones</h3>
+                <p>{{ producto.especificaciones|linebreaks }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Productos relacionados -->
+    {% if productos_relacionados %}
+    <div class="row mt-5">
+        <h3 class="mb-4">Productos relacionados</h3>
+        {% for prod in productos_relacionados %}
+        <div class="col-md-3">
+            <div class="card">
+                <img src="{{ prod.imagen.url }}" class="card-img-top" alt="{{ prod.nombre }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ prod.nombre }}</h5>
+                    <p class="card-text">${{ prod.precio }}</p>
+                    <a href="{% url 'detalle_producto' prod.idProducto %}" class="btn btn-outline-primary">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
