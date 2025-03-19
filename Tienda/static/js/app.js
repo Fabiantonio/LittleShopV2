@@ -160,15 +160,35 @@ function crearPokemon(data) {
     numero.textContent = "N°: " + data.id;
 }
 
-const carritoBtn = document.getElementById('carrito');
-const carritoContainer = document.getElementById('carrito2');
-
-carritoBtn.addEventListener('click', () => {
-    carritoContainer.classList.toggle('show');
-});
-
-const carritoCerrarBtn = document.getElementById('carrito-cerrar');
-
-carritoCerrarBtn.addEventListener('click', () => {
-    carritoContainer.classList.remove('show');
+// Carrito de compras - Funcionalidad mejorada
+document.addEventListener('DOMContentLoaded', function() {
+    const carritoBtn = document.getElementById('btnMostrarCarrito');
+    const carritoContainer = document.getElementById('carrito2');
+    const carritoCerrarBtn = document.getElementById('carrito-cerrar');
+    
+    // Mostrar carrito al hacer clic en el botón
+    if (carritoBtn && carritoContainer) {
+        carritoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            carritoContainer.classList.add('show');
+        });
+    }
+    
+    // Cerrar carrito al hacer clic en el botón de cerrar
+    if (carritoCerrarBtn && carritoContainer) {
+        carritoCerrarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            carritoContainer.classList.remove('show');
+        });
+    }
+    
+    // Cerrar carrito al hacer clic fuera del carrito
+    document.addEventListener('click', function(e) {
+        if (carritoContainer && carritoContainer.classList.contains('show')) {
+            // Si el clic no fue dentro del carrito ni en el botón de mostrar carrito
+            if (!carritoContainer.contains(e.target) && e.target !== carritoBtn && !carritoBtn.contains(e.target)) {
+                carritoContainer.classList.remove('show');
+            }
+        }
+    });
 });

@@ -20,9 +20,14 @@ label.error {
 #carrito2 {
     position: fixed;
     top: 0;
-    right: -380px;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
     transition: right 0.3s ease-in-out;
-    z-index: 3;
+    z-index: 1000;
+    overflow-y: auto;
 }
 
 #carrito2.show {
@@ -192,18 +197,26 @@ h1 {
 }
 
 .carrito2 .header-carrito {
-    background-color: #000;
-    color: #fff;
-    text-align: center;
-    padding: 30px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.carrito2 .header-carrito h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
 }
 
 .carrito2 .header-carrito i {
-    position: absolute;
-    font-size: 25px;
-    color: white;
-    top: 10px;
-    left: 10px;
+    font-size: 1.5rem;
+    color: #555;
 }
 
 .carrito2 .carrito-item {

@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="bg-white shadow-sm rounded-3 p-4">
+                <h2 class="text-center mb-4">Mi Carrito de Compras</h2>
+                
+                {% if request.session.carrito.items %}
+                <div class="cart-items">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="py-3">Producto</th>
+                                    <th class="py-3 text-center">Precio</th>
+                                    <th class="py-3 text-center">Cantidad</th>
+                                    <th class="py-3 text-center">Subtotal</th>
+                                    <th class="py-3 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, item in request.session.carrito.items %}
+                                <tr id="item-{{ key }}">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.imagen %}
+                                            <img src="{{ item.imagen }}" class="img-fluid rounded me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="{{ item.nombre }}">
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ item.nombre }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">${{ item.precio }}</td>
+                                    <td class="text-center">
+                                        <div class="quantity-controls d-flex align-items-center justify-content-center">
+                                            <button class="update-quantity btn btn-sm" 
+                                                    data-product-id="{{ key }}" 
+                                                    data-action="decrease"
+                                                    style="width: 30px; height: 30px; border-radius: 50%; background-color: #f0f0f0;">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <span class="quantity-{{ key }} mx-3 fw-bold">{{ item.cantidad }}</span>
+                                            <button class="update-quantity btn btn-sm" 
+                                                    data-product-id="{{ key }}" 
+                                                    data-action="increase"
+                                                    style="width: 30px; height: 30px; border-radius: 50%; background-color: #f0f0f0;">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="text-center fw-bold text-success subtotal-{{ key }}">${{ item.subtotal|default:item.precio }}</td>
+                                    <td class="text-center">
+                                        <button class="remove-item btn btn-sm btn-outline-danger p-2" 
+                                                data-product-id="{{ key }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="cart-summary mt-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body p-4">
+                                        <h5 class="mb-3">Resumen de Orden</h5>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Subtotal:</span>
+                                            <span>${{ subtotal }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Envío:</span>
+                                            <span>Calculado al finalizar</span>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between mb-0 fw-bold">
+                                            <span>Total:</span>
+                                            <span class="cart-total text-success">${{ total|default:subtotal }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="cart-actions d-grid gap-2 mt-md-0 mt-3">
+                                    <a href="{% url 'generarBoleta' %}" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-check-circle me-2"></i>Proceder al pago
+                                    </a>
+                                    <button class="clear-cart btn btn-outline-danger">
+                                        <i class="fas fa-trash-alt me-2"></i>Limpiar carrito
+                                    </button>
+                                    <a href="{% url 'inicio' %}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Seguir comprando
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="empty-cart text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-shopping-cart fa-5x text-muted"></i>
+                    </div>
+                    <h3 class="mb-3">Tu carrito está vacío</h3>
+                    <p class="text-muted mb-4">Parece que aún no has agregado productos a tu carrito</p>
+                    <a href="{% url 'inicio' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-store me-2"></i>Ir a comprar
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejar botones de actualizar cantidad
+    const updateBtns = document.querySelectorAll('.update-quantity');
+    updateBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const action = this.dataset.action;
+            
+            fetch('{% url "actualizar_cantidad" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    'product_id': productId,
+                    'action': action
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualizar cantidad
+                    const quantityElement = document.querySelector(`.quantity-${productId}`);
+                    if (quantityElement) {
+                        quantityElement.textContent = data.quantity;
+                    }
+                    
+                    // Actualizar subtotal
+                    const subtotalElement = document.querySelector(`.subtotal-${productId}`);
+                    if (subtotalElement) {
+                        subtotalElement.textContent = `$${data.subtotal.toFixed(0)}`;
+                    }
+                    
+                    // Actualizar total
+                    const totalElement = document.querySelector('.cart-total');
+                    if (totalElement) {
+                        totalElement.textContent = `$${data.total.toFixed(0)}`;
+                    }
+                    
+                    // Si el producto se eliminó por llegar a cantidad 0
+                    if (data.quantity === 0) {
+                        const itemRow = document.getElementById(`item-${productId}`);
+                        if (itemRow) {
+                            itemRow.remove();
+                        }
+                    }
+                }
+            });
+        });
+    });
+    
+    // Manejar botones de eliminar item
+    const removeBtns = document.querySelectorAll('.remove-item');
+    removeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            
+            fetch('{% url "eliminar_del_carrito" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    'product_id': productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Eliminar la fila
+                    const itemRow = document.getElementById(`item-${productId}`);
+                    if (itemRow) {
+                        itemRow.remove();
+                    }
+                    
+                    // Actualizar total
+                    const totalElement = document.querySelector('.cart-total');
+                    if (totalElement) {
+                        totalElement.textContent = `$${data.total.toFixed(0)}`;
+                    }
+                    
+                    // Si el carrito está vacío, recargar página
+                    if (data.cart_count === 0) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

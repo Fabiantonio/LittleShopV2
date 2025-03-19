@@ -16,14 +16,143 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/28585b3709.js" crossorigin="anonymous"></script>
     <title>Inicio</title>
+    
+    <style>
+    /* Estilos para el carrito lateral */
+    .carrito2 {
+        position: fixed;
+        right: -400px;
+        top: 0;
+        width: 400px;
+        height: 100vh;
+        background-color: white;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1000;
+        transition: right 0.4s ease;
+        overflow-y: auto;
+        padding-bottom: 60px;
+    }
+    .carrito2.show {
+        right: 0;
+    }
+    .header-carrito {
+        padding: 20px;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .header-carrito h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #333;
+    }
+    #carrito-cerrar {
+        color: #555;
+        font-size: 1.5rem;
+        text-decoration: none;
+    }
+    .carrito-items {
+        padding: 15px;
+    }
+    .carrito-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .carrito-item img {
+        border-radius: 8px;
+        margin-right: 15px;
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+    }
+    .carrito-item-detalles {
+        flex-grow: 1;
+    }
+    .carrito-item-titulo {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+    .selector-cantidad {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .selector-cantidad a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        color: #555;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+    .carrito-item-precio {
+        display: block;
+        font-weight: 600;
+        color: #28a745;
+    }
+    .carrito-total {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .fila {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .fila strong {
+        font-size: 1.2rem;
+    }
+    .carrito-precio-total {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #28a745;
+    }
+    .btn-pagar {
+        display: inline-block;
+        width: 48%;
+        padding: 12px;
+        text-align: center;
+        background-color: #28a745;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-right: 2%;
+        transition: all 0.3s;
+        box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2);
+    }
+    .btn-pagar:last-child {
+        background-color: #dc3545;
+        margin-right: 0;
+        box-shadow: 0 3px 8px rgba(220, 53, 69, 0.2);
+    }
+    .btn-pagar:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+        color: white;
+    }
+    </style>
 </head>
-
-
-
-</html>
-
 
 <body style="background-color: white;">
 
@@ -65,7 +194,7 @@
                     </ul>
 
                     <div id="carrito" class="carrito-img mx-5">
-                        <a type="button" class="fa-solid fa-cart-shopping position-relative">
+                        <a type="button" class="fa-solid fa-cart-shopping position-relative" id="btnMostrarCarrito">
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 {{ cantidad_productos }}
                             </span>
@@ -93,6 +222,54 @@
             </div>
         </nav>
     </header>
+
+    <!-- Carrito lateral -->
+    <div class="carrito2" id="carrito2">
+        <div class="header-carrito">
+          <h2 class="text-white m-auto">Tu Carrito</h2>
+          <a id="carrito-cerrar" href="#"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+        <div class="carrito-items">
+          {% if request.session.carrito.items %}
+          {% for key, value in request.session.carrito.items %}
+            <div class="carrito-item">
+              <img src="{{ value.imagen }}" alt="{{ value.nombre }}">
+              <div class="carrito-item-detalles">
+                <span class="carrito-item-titulo">{{ value.nombre }}</span>
+                <div class="selector-cantidad">
+                  <a href="{% url 'restar_producto' value.idProducto %}" class="fa-solid fa-minus restar-cantidad"></a>
+                  <span>{{value.cantidad}}</span>
+                  <a href="{% url 'agregar_producto' value.idProducto %}" class="fa-solid fa-plus sumar-cantidad"></a>
+                </div>
+                <span class="carrito-item-precio">${{value.precio}}</span>
+              </div>
+            </div>
+          {%endfor%}
+          <div class="carrito-total">
+            <div class="fila">
+              <strong>Tu Total</strong>
+              <span class="carrito-precio-total">
+                ${{ subtotal }}
+              </span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="{% url 'generarBoleta' %}" class="btn-pagar">
+                <i class="fa-solid fa-bag-shopping me-2"></i>Pagar
+              </a>
+              <a href="{% url 'limpiar_carrito' %}" class="btn-pagar">
+                <i class="fa-solid fa-broom me-2"></i>Limpiar
+              </a>
+            </div>
+          </div>
+        {%else%}
+          <div class="text-center py-5">
+            <i class="fas fa-shopping-cart fa-4x mb-3 text-muted"></i>
+            <h4>Tu carrito está vacío</h4>
+            <p class="text-muted">¡Agrega productos para comenzar!</p>
+          </div>
+        {%endif%}
+        </div>
+    </div>
 
     {% block content %}
     <div class="container mt-5">
@@ -147,9 +324,8 @@
         </div>
     </footer>
 
-
     <script src="{% static 'js/app.js' %}"></script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&callback=iniciarMap"></script> -->
+    <script src="{% static 'js/cart.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>

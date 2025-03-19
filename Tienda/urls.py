@@ -1,21 +1,20 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
-from .views import mostrarInicio, listarProductos, crearProductos, eliminarProductos, \
-                    modificarProductos, registrar, agregar_producto, limpiar_carrito, \
-                    restar_producto, eliminar_producto, generarBoleta, detalle_producto
+from . import views
 
-urlpatterns=[ 
-    path('', mostrarInicio, name="inicio"),
-    path('listarproductos/', listarProductos, name="listarProductos"),
-    path('crearproductos/', crearProductos, name="crearProductos"),
-    path('eliminarProductos/<id>', eliminarProductos, name="eliminarProductos"),
-    path('modificarproductos/<id>', modificarProductos, name="modificarProductos"),
-    path('registrar/', registrar, name="registrar"),
-    path('agregar_producto/<id>', agregar_producto, name="agregar"),
-    path('eliminar_producto/<id>', eliminar_producto, name="eliminar"),
-    path('restar_producto/<id>', restar_producto, name="restar"),
-    path('limpiar_carrito', limpiar_carrito, name="limpiar"),
-    path('generarBoleta/', generarBoleta, name="generarBoleta"),
-    path('producto/<id>/', detalle_producto, name="detalle_producto"),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+urlpatterns = [
+    path('', views.mostrarInicio, name='inicio'),
+    path('actualizar_cantidad/', views.actualizar_cantidad, name='actualizar_cantidad'),
+    path('eliminar_del_carrito/', views.eliminar_del_carrito, name='eliminar_del_carrito'),
+    path('limpiar_carrito/', views.limpiar_carrito, name='limpiar_carrito'),
+    path('detalle/<str:id>/', views.detalle_producto, name='detalle_producto'),
+    path('agregar/<str:id>/', views.agregar_producto, name='agregar_producto'),
+    path('eliminar/<str:id>/', views.eliminar_producto, name='eliminar_producto'),
+    path('restar/<str:id>/', views.restar_producto, name='restar_producto'),
+    path('listar/', views.listarProductos, name='listarProductos'),
+    path('crear/', views.crearProductos, name='crearProductos'),
+    path('modificar/<str:id>/', views.modificarProductos, name='modificarProductos'),
+    path('eliminarProducto/<str:id>/', views.eliminarProductos, name='eliminarProductos'),
+    path('registrar/', views.registrar, name='registrar'),
+    path('generar_boleta/', views.generarBoleta, name='generarBoleta'),
+    path('agregar_al_carrito/<str:producto_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),
 ]

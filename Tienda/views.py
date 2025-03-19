@@ -8,6 +8,7 @@ from django.http import Http404, JsonResponse
 from django.contrib.auth import authenticate, login
 from Tienda.compra import Carrito
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def obtener_cantidad_total_carrito(request):
@@ -46,10 +47,26 @@ def agregar_producto(request, id):
 
     if producto.stock > 0:
         carrito_compra.agregar(producto=producto)
-        return redirect('inicio')
+        
+        # Verificar si es una solicitud AJAX
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': 'Producto agregado al carrito',
+                'cart_count': obtener_cantidad_total_carrito(request)
+            })
+        else:
+            messages.success(request, "Producto agregado al carrito correctamente")
+            return redirect('inicio')
     else:
-        messages.error(request, "El producto está agotado")
-        return redirect('inicio')
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'message': 'El producto está agotado'
+            })
+        else:
+            messages.error(request, "El producto está agotado")
+            return redirect('inicio')
 
 def eliminar_producto(request, id):
     carrito_compra = Carrito(request)
@@ -63,10 +80,21 @@ def restar_producto(request, id):
     carrito_compra.restar(producto=producto)
     return redirect('inicio')
 
+@csrf_exempt
 def limpiar_carrito(request):
-    carrito_compra = Carrito(request)
-    carrito_compra.limpiar()
-    return redirect('inicio')
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Es una solicitud AJAX
+        if request.method == 'POST':
+            if 'carrito' in request.session:
+                del request.session['carrito']
+                request.session.modified = True
+                return JsonResponse({'success': True})
+        return JsonResponse({'success': False})
+    else:
+        # Es una solicitud normal
+        carrito_compra = Carrito(request)
+        carrito_compra.limpiar()
+        return redirect('inicio')
 
 @login_required
 def listarProductos(request):
@@ -160,19 +188,113 @@ def generarBoleta(request):
     carrito.limpiar()
     return render(request, 'detallecarrito.html', datos)
 
+# Add these imports at the top of your file
+from django.http import JsonResponse
+import json
+
+# Modify your add to cart view to handle AJAX
+def agregar_al_carrito(request, producto_id):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        carrito = request.session.get('carrito', {})
-        subtotal = sum(item['total'] for item in carrito.values())
-        cantidad_total = obtener_cantidad_total_carrito(request)
+        # Handle AJAX request
+        producto = get_object_or_404(Producto, idProducto=producto_id)
         
-        html = render_to_string('carrito_items.html', {
-            'carrito': carrito,
-            'subtotal': subtotal
-        }, request=request)
+        # Your existing cart logic here
+        if 'carrito' not in request.session:
+            request.session['carrito'] = {}
+            
+        carrito = request.session['carrito']
+        
+        if producto_id in carrito:
+            carrito[producto_id]['cantidad'] += 1
+        else:
+            carrito[producto_id] = {
+                'idProducto': producto.idProducto,
+                'nombre': producto.nombre,
+                'precio': float(producto.precio),
+                'cantidad': 1,
+                'imagen': producto.imagen.url if producto.imagen else ''
+            }
+            
+        request.session['carrito'] = carrito
+        request.session.modified = True
+        
+        # Calculate cart count
+        cart_count = sum(item['cantidad'] for item in carrito.values())
         
         return JsonResponse({
-            'html': html,
-            'subtotal': subtotal,
-            'cart_total': cantidad_total
+            'success': True,
+            'cart_count': cart_count
         })
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    else:
+        # Handle regular request (fallback)
+        return redirect('inicio')
+
+# Add a view to update quantity
+@csrf_exempt
+def actualizar_cantidad(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        producto_id = data.get('product_id')
+        action = data.get('action')
+        
+        if 'carrito' not in request.session:
+            return JsonResponse({'success': False})
+            
+        carrito = request.session['carrito']
+        
+        if producto_id in carrito:
+            if action == 'increase':
+                carrito[producto_id]['cantidad'] += 1
+            elif action == 'decrease':
+                if carrito[producto_id]['cantidad'] > 1:
+                    carrito[producto_id]['cantidad'] -= 1
+                else:
+                    del carrito[producto_id]
+                    
+            request.session['carrito'] = carrito
+            request.session.modified = True
+            
+            # Calculate subtotal and total
+            subtotal = carrito[producto_id]['precio'] * carrito[producto_id]['cantidad'] if producto_id in carrito else 0
+            total = sum(item['precio'] * item['cantidad'] for item in carrito.values())
+            cart_count = sum(item['cantidad'] for item in carrito.values())
+            
+            return JsonResponse({
+                'success': True,
+                'quantity': carrito[producto_id]['cantidad'] if producto_id in carrito else 0,
+                'subtotal': subtotal,
+                'total': total,
+                'cart_count': cart_count
+            })
+            
+    return JsonResponse({'success': False})
+
+# Add a view to remove item from cart
+@csrf_exempt
+def eliminar_del_carrito(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        producto_id = data.get('product_id')
+        
+        if 'carrito' not in request.session:
+            return JsonResponse({'success': False})
+            
+        carrito = request.session['carrito']
+        
+        if producto_id in carrito:
+            del carrito[producto_id]
+            request.session['carrito'] = carrito
+            request.session.modified = True
+            
+            # Calculate total
+            total = sum(item['precio'] * item['cantidad'] for item in carrito.values())
+            cart_count = sum(item['cantidad'] for item in carrito.values())
+            
+            return JsonResponse({
+                'success': True,
+                'total': total,
+                'cart_count': cart_count
+            })
+            
+    return JsonResponse({'success': False})
+
