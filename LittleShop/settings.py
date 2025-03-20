@@ -22,8 +22,8 @@ SECRET_KEY = 'django-insecure-vzz=x6rohe!)y#jzabzw4g)qwau1!&ca3t!)6&+$emnn8(od+3
 # Temporalmente habilitamos DEBUG para identificar el error
 DEBUG = True
 
-# Permitir el dominio de Vercel y localhost para desarrollo
-ALLOWED_HOSTS = ['*', '.vercel.app', 'localhost', '127.0.0.1']
+# Permitir el dominio de Render y localhost para desarrollo
+ALLOWED_HOSTS = ['*', '.onrender.com', 'localhost', '127.0.0.1']
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
