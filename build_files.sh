@@ -1,5 +1,6 @@
 #!/bin/bash
 
 # Crear directorio para archivos estáticos
-python -m pip install -r requirements.txt
-python manage.py collectstatic --noinput
+# Usar la ruta específica de Python proporcionada por Vercel
+/opt/vercel/python3.9/bin/python -m pip install -r requirements.txt
+/opt/vercel/python3.9/bin/python manage.py collectstatic --noinput
