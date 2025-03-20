@@ -13,7 +13,9 @@
       "src": "build_files.sh",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "staticfiles"
+        "distDir": "staticfiles",
+        "installCommand": "pip install -r requirements.txt",
+        "buildCommand": "python3 manage.py collectstatic --noinput && python3 manage.py migrate"
       }
     }
   ],
