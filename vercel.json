@@ -2,14 +2,6 @@
   "version": 2,
   "builds": [
     {
-      "src": "build_files.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles",
-        "zeroConfig": true
-      }
-    },
-    {
       "src": "LittleShop/wsgi.py",
       "use": "@vercel/python",
       "config": {
@@ -17,6 +9,7 @@
       }
     }
   ],
+  "buildCommand": "chmod +x vercel.sh && ./vercel.sh",
   "routes": [
     {
       "src": "/static/(.*)",
