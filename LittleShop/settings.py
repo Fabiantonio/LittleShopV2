@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-vzz=x6rohe!)y#jzabzw4g)qwau1!&ca3t!)6&+$emnn8(od+3
 DEBUG = False
 
 # Permitir el dominio de Vercel y localhost para desarrollo
-ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*', '.vercel.app', 'localhost', '127.0.0.1']
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
@@ -130,7 +130,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
 
 # Configuración de WhiteNoise para servir archivos estáticos

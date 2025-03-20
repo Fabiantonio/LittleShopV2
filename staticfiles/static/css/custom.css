@@ -1,0 +1,10 @@
+.message-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 15px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
