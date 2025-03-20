@@ -4,7 +4,7 @@
 echo "Building static files..."
 
 # Install dependencies
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # Collect static files
 python manage.py collectstatic --noinput
