@@ -15,9 +15,6 @@
         <!-- Imagen del producto -->
         <div class="col-lg-6 mb-4">
             <div class="product-image-container bg-white rounded-3 shadow-sm p-3">
-                <!-- Reemplazar esta línea: -->
-                <!-- <img src="{{ producto.imagen.url }}" class="img-fluid rounded-3" alt="{{ producto.nombre }}" style="width: 100%; height: 400px; object-fit: contain;"> -->
-                <!-- Por esta: -->
                 <img src="{{ producto.get_imagen_url }}" class="img-fluid rounded-3" alt="{{ producto.nombre }}" style="width: 100%; height: 400px; object-fit: contain;">
             </div>
         </div>

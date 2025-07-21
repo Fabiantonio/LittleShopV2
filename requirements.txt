@@ -3,6 +3,7 @@ crispy-bootstrap5==2024.10
 dj-database-url==2.3.0
 Django==5.1.5
 django-crispy-forms==2.3
+django-storage-supabase==0.0.5
 packaging==24.2
 psycopg2-binary==2.9.10
 pillow==11.1.0

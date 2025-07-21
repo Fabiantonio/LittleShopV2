@@ -1,0 +1,11 @@
+{
+  "name": "littleshop",
+  "version": "1.0.0",
+  "description": "Little Shop Django Application",
+  "scripts": {
+    "build": "bash ./vercel-build.sh"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -160,9 +160,6 @@
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="product-card">
               <a href="{% url 'detalle_producto' i.idProducto %}" class="text-decoration-none">
-                <!-- Reemplazar esta línea: -->
-                <!-- <img src="{{ i.imagen.url }}" class="product-image w-100" alt="{{ i.nombre }}"> -->
-                <!-- Por esta: -->
                 <img src="{{ i.get_imagen_url }}" class="product-image w-100" alt="{{ i.nombre }}">
                 <div class="card-body text-center">
                   <h5 class="product-title">{{ i.nombre }}</h5>
@@ -198,9 +195,6 @@
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="product-card">
               <a href="{% url 'detalle_producto' i.idProducto %}" class="text-decoration-none">
-                <!-- Reemplazar esta línea: -->
-                <!-- <img src="{{ i.imagen.url }}" class="product-image w-100" alt="{{ i.nombre }}"> -->
-                <!-- Por esta: -->
                 <img src="{{ i.get_imagen_url }}" class="product-image w-100" alt="{{ i.nombre }}">
                 <div class="card-body text-center">
                   <h5 class="product-title">{{ i.nombre }}</h5>

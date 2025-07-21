@@ -19,10 +19,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vzz=x6rohe!)y#jzabzw4g)qwau1!&ca3t!)6&+$emnn8(od+3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Configurar DEBUG basado en el entorno
+DEBUG = 'VERCEL' not in os.environ
 
 # Permitir el dominio de Vercel y localhost para desarrollo
-ALLOWED_HOSTS = ['*', '.vercel.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['littleshopv2.vercel.app', '.vercel.app', 'localhost', '127.0.0.1']
+
+# Configuración de CSRF para Vercel
+CSRF_TRUSTED_ORIGINS = ['https://littleshopv2.vercel.app']
+
+# Configuración para HTTPS en Vercel
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Solo activar redirección SSL en producción
+SECURE_SSL_REDIRECT = 'VERCEL' in os.environ
+# Solo activar cookies seguras en producción
+SESSION_COOKIE_SECURE = 'VERCEL' in os.environ
+CSRF_COOKIE_SECURE = 'VERCEL' in os.environ
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
@@ -133,8 +145,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
 
+# Directorios adicionales donde Django buscará archivos estáticos
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'Tienda/static'),
+]
+
 # Configuración de WhiteNoise para servir archivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Usar WhiteNoise solo en producción
+if 'VERCEL' in os.environ:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
