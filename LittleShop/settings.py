@@ -81,19 +81,13 @@ WSGI_APPLICATION = 'LittleShop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# Configuración por defecto (SQLite)
+# Configuración de la base de datos
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# Configuración para Supabase (PostgreSQL)
-# Si existe la variable DATABASE_URL en el entorno, se usa para configurar la base de datos
-database_url = os.getenv('DATABASE_URL')
-if database_url:
-    DATABASES['default'] = dj_database_url.parse(database_url)
 
 
 # Password validation
