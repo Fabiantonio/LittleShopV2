@@ -195,14 +195,17 @@
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="product-card">
               <a href="{% url 'detalle_producto' i.idProducto %}" class="text-decoration-none">
-                <img src="{{ i.imagen.url }}" class="product-image w-100" alt="{{ i.nombre }}">
+                <!-- Reemplazar esta línea: -->
+                <!-- <img src="{{ i.imagen.url }}" class="product-image w-100" alt="{{ i.nombre }}"> -->
+                <!-- Por esta: -->
+                <img src="{% static i.get_imagen_url %}" class="product-image w-100" alt="{{ i.nombre }}">
                 <div class="card-body text-center">
                   <h5 class="product-title">{{ i.nombre }}</h5>
                   <p class="product-price">${{ i.precio }}</p>
                   {% if i.stock > 0 %}
-                    <button class="btn-buy add-to-cart" data-product-id="{{ i.idProducto }}">
+                    <a href="{% url 'agregar_producto' i.idProducto %}" class="btn-buy">
                       <i class="fas fa-cart-plus me-2"></i>Agregar
-                    </button>
+                    </a>
                   {% else %}
                     <span class="btn-buy disabled">
                       <i class="fas fa-times me-2"></i>Sin stock

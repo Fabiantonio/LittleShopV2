@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 import datetime
+# Eliminamos la importación de SupabaseStorage
+# from django_storage_supabase.supabase import SupabaseStorage
 
 # Create your models here.
     
@@ -17,7 +19,8 @@ class Producto(models.Model):
     nombre       = models.CharField(max_length=50, verbose_name="Nombre")
     precio       = models.IntegerField(verbose_name="Precio")
     stock        = models.IntegerField(verbose_name="Stock", null=True)
-    imagen       = models.ImageField(upload_to="imagenes", null=True, blank=True, verbose_name='Imagen')
+    # Modificamos el campo imagen para usar almacenamiento local
+    imagen       = models.CharField(max_length=100, null=True, blank=True, verbose_name='Imagen')
     categoria    = models.ForeignKey(Categoria, on_delete=models.CASCADE, verbose_name="Categoria")
     descripcion  = models.TextField(verbose_name="Descripción", null=True, blank=True)
     especificaciones = models.TextField(verbose_name="Especificaciones", null=True, blank=True)
@@ -30,6 +33,11 @@ class Producto(models.Model):
     def get_absolute_url(self):
         return reverse('detalle_producto', args=[str(self.idProducto)])
     
+    def get_imagen_url(self):
+        # Devolvemos la URL estática de la imagen
+        if self.imagen:
+            return f"/static/img/{self.imagen}"
+        return "/static/img/pngegg.png"  # Imagen por defecto
 class Boleta(models.Model):
     id_boleta   = models.AutoField(primary_key=True)
     total       = models.BigIntegerField()

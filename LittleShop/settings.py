@@ -19,11 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vzz=x6rohe!)y#jzabzw4g)qwau1!&ca3t!)6&+$emnn8(od+3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Temporalmente habilitamos DEBUG para identificar el error
-DEBUG = True
+DEBUG = False
 
-# Permitir el dominio de Render y localhost para desarrollo
-ALLOWED_HOSTS = ['*', '.onrender.com', 'localhost', '127.0.0.1']
+# Permitir el dominio de Vercel y localhost para desarrollo
+ALLOWED_HOSTS = ['*', '.vercel.app', 'localhost', '127.0.0.1']
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
@@ -82,12 +81,19 @@ WSGI_APPLICATION = 'LittleShop.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 # Configuración de la base de datos
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Usar la URL de la base de datos de Supabase si está disponible, sino usar SQLite
+database_url = os.getenv('DATABASE_URL')
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(database_url)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -135,8 +141,17 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL="/media-files/"
-MEDIA_ROOT=BASE_DIR / "files"
+# Configuración de almacenamiento de medios con Supabase
+DEFAULT_FILE_STORAGE = 'django_storage_supabase.supabase'
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_ROOT_PATH = '/'
+SUPABASE_PROJECT_ID = 'qysjehlafbiklnspldxr'
+SUPABASE_BUCKET_ID = 'imagenes'
+SUPABASE_PUBLIC_BUCKET = True
 
-LOGIN_REDIRECT_URL="/"
-LOGOUT_REDIRECT_URL="/"
+MEDIA_URL = "/media-files/"
+MEDIA_ROOT = BASE_DIR / "files"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"

@@ -15,7 +15,10 @@
         <!-- Imagen del producto -->
         <div class="col-lg-6 mb-4">
             <div class="product-image-container bg-white rounded-3 shadow-sm p-3">
-                <img src="{{ producto.imagen.url }}" class="img-fluid rounded-3" alt="{{ producto.nombre }}" style="width: 100%; height: 400px; object-fit: contain;">
+                <!-- Reemplazar esta línea: -->
+                <!-- <img src="{{ producto.imagen.url }}" class="img-fluid rounded-3" alt="{{ producto.nombre }}" style="width: 100%; height: 400px; object-fit: contain;"> -->
+                <!-- Por esta: -->
+                <img src="{% static producto.get_imagen_url %}" class="img-fluid rounded-3" alt="{{ producto.nombre }}" style="width: 100%; height: 400px; object-fit: contain;">
             </div>
         </div>
         
@@ -97,7 +100,10 @@
             <div class="col">
                 <div class="card h-100 border-0 shadow-sm product-card">
                     <a href="{% url 'detalle_producto' prod.idProducto %}" class="text-decoration-none position-relative">
-                        <img src="{{ prod.imagen.url }}" class="card-img-top product-image" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;">
+                        <!-- Reemplazar esta línea: -->
+                        <!-- <img src="{{ prod.imagen.url }}" class="card-img-top product-image" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;"> -->
+                        <!-- Por esta: -->
+                        <img src="{% static prod.get_imagen_url %}" class="card-img-top product-image" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;">
                         <div class="card-body text-center">
                             <h5 class="card-title product-title">{{ prod.nombre }}</h5>
                             <p class="card-text product-price">${{ prod.precio }}</p>

@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "LittleShop/wsgi.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "static/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "files/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/media-files/(.*)",
+      "dest": "/files/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "LittleShop/wsgi.py"
+    }
+  ]
+}
