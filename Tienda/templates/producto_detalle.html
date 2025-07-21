@@ -97,10 +97,8 @@
             <div class="col">
                 <div class="card h-100 border-0 shadow-sm product-card">
                     <a href="{% url 'detalle_producto' prod.idProducto %}" class="text-decoration-none position-relative">
-                        <!-- Reemplazar esta línea: -->
-                        <!-- <img src="{{ prod.imagen.url }}" class="card-img-top product-image" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;"> -->
-                        <!-- Por esta: -->
-                        <img src="{% static prod.get_imagen_url %}" class="card-img-top product-image" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;">
+                        <!-- Imagen del producto relacionado -->
+                        <img src="{{ prod.get_imagen_url }}" class="card-img-top product-image" alt="{{ prod.nombre }}" style="height: 200px; object-fit: cover;">
                         <div class="card-body text-center">
                             <h5 class="card-title product-title">{{ prod.nombre }}</h5>
                             <p class="card-text product-price">${{ prod.precio }}</p>
