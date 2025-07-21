@@ -36,7 +36,9 @@ class Producto(models.Model):
     def get_imagen_url(self):
         # Devolvemos la URL estática de la imagen
         if self.imagen:
-            return f"/static/img/{self.imagen}"
+            # Extraemos solo el nombre del archivo sin la ruta
+            imagen_nombre = str(self.imagen).split('/')[-1]
+            return f"/static/img/{imagen_nombre}"
         return "/static/img/pngegg.png"  # Imagen por defecto
 class Boleta(models.Model):
     id_boleta   = models.AutoField(primary_key=True)

@@ -212,7 +212,7 @@ def agregar_al_carrito(request, producto_id):
                 'nombre': producto.nombre,
                 'precio': float(producto.precio),
                 'cantidad': 1,
-                'imagen': producto.imagen.url if producto.imagen else ''
+                'imagen': producto.get_imagen_url()
             }
             
         request.session['carrito'] = carrito

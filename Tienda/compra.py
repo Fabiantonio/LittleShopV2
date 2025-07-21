@@ -15,7 +15,7 @@ class Carrito:
                 "precio": str(producto.precio),
                 "cantidad": 1,
                 "total": producto.precio,
-                "imagen": producto.imagen.url,
+                "imagen": producto.get_imagen_url(),
             }
         else:
             for key, value in self.carrito.items():

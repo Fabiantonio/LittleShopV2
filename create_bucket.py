@@ -20,7 +20,7 @@ supabase: Client = create_client(
 
 def create_bucket_if_not_exists(bucket_name='product-images'):
     try:
-        # Intentar crear el bucket usando createBucket
+        # Intentar crear el bucket
         supabase.storage.createBucket(
             bucket_name,
             {'public': True}

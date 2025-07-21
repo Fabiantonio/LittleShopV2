@@ -233,6 +233,9 @@
           {% if request.session.carrito.items %}
           {% for key, value in request.session.carrito.items %}
             <div class="carrito-item">
+              <!-- Reemplazar esta línea: -->
+              <!-- <img src="{{ value.imagen }}" alt="{{ value.nombre }}"> -->
+              <!-- Por esta: -->
               <img src="{{ value.imagen }}" alt="{{ value.nombre }}">
               <div class="carrito-item-detalles">
                 <span class="carrito-item-titulo">{{ value.nombre }}</span>

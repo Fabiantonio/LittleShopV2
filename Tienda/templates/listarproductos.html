@@ -62,7 +62,10 @@
                     <td>{{ i.categoria }}</td>
                     {% if i.imagen %}
                         <td>
-                            <img src="{{ i.imagen.url }}" width="150px" alt="">
+                            <!-- Reemplazar esta línea: -->
+                            <!-- <img src="{{ i.imagen.url }}" width="150px" alt=""> -->
+                            <!-- Por esta: -->
+                            <img src="{{ i.get_imagen_url }}" width="150px" alt="{{ i.nombre }}">
                         </td>
                     {% else %}
                         <td>

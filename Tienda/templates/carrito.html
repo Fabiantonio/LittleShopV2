@@ -27,7 +27,10 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             {% if item.imagen %}
-                                            <img src="{{ item.imagen }}" class="img-fluid rounded me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="{{ item.nombre }}">
+                                            <!-- Reemplazar esta línea: -->
+                                            <!-- <img src="{{ item.imagen }}" class="img-fluid rounded me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="{{ item.nombre }}"> -->
+                                            <!-- Por esta: -->
+                                            <img src="{% static item.imagen %}" class="img-fluid rounded me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="{{ item.nombre }}">
                                             {% endif %}
                                             <div>
                                                 <h6 class="mb-0">{{ item.nombre }}</h6>
